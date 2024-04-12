@@ -25,12 +25,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const formSchema = z.object({
   lastname: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
   firstname: z.string().min(2, {
+    message: "Firstname must be at least 2 characters.",
+  }),
+  email: z.string().min(2, {
+    message: "Firstname must be at least 2 characters.",
+  }),
+  register_number: z.string().min(2, {
     message: "Firstname must be at least 2 characters.",
   }),
   sex: z.enum(["male", "female"], {
@@ -94,20 +109,6 @@ function AnketForm() {
             />
             <FormField
               control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Утасны дугаар*</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Утасны дугаар" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="sex"
               render={({ field }) => (
                 <FormItem className="space-y-3">
@@ -136,26 +137,130 @@ function AnketForm() {
                 </FormItem>
               )}
             />
-            <FormItem>
-              <FormLabel>Утасны дугаар*</FormLabel>
-              <FormControl>
-                <Input placeholder="Утасны дугаар" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <FormField
+              control={form.control}
+              name="register_number"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Регистрийн дугаар*</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Регистрийн дугаар*" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Оршин суугаа газрын хаяг*</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Оршин суугаа газрын хаяг" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Иргэний үнэмлэхний хаяг*</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Иргэний үнэмлэхний хаяг" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Утасны дугаар*</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Утасны дугаар" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Имэйл хаяг*</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Имэйл хаяг" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardTitle>БОЛОВСРОЛЫН ТАЛААРХ МЭДЭЭЛЭЛ</CardTitle>
+            {/* <CardDescription>Card Description</CardDescription> */}
           </CardHeader>
           <CardContent>
-            <p>Card Content</p>
+            <Table>
+              <TableCaption>A list of your recent invoices.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">Invoice</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Method</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="font-medium">INV001</TableCell>
+                  <TableCell>
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Имэйл хаяг*</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Имэйл хаяг" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Имэйл хаяг*</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Имэйл хаяг" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </TableCell>
+                  <TableCell className="text-right">$250.00</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
           </CardContent>
-          <CardFooter>
+          {/* <CardFooter>
             <p>Card Footer</p>
-          </CardFooter>
+          </CardFooter> */}
         </Card>
         <Button type="submit">Submit</Button>
       </form>
