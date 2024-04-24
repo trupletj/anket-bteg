@@ -162,6 +162,45 @@ function AnketForm() {
           relation: "",
         },
       ],
+      coursesInfo: [
+        {
+          courseName: "",
+          start_date: "",
+          end_date: "",
+          profession: "",
+        },
+      ],
+
+      jobHistory: [
+        {
+          companyName: "",
+          jobPosition: "",
+          start_date: "",
+          end_date: "",
+          dismissalReason: "",
+        },
+      ],
+      computerKnowledge: [
+        {
+          appName: "",
+          level: "",
+        },
+      ],
+
+      skillsInfo: [
+        {
+          skillName: "",
+          award: "",
+          competition: "",
+        },
+      ],
+      awardsInfo: [
+        {
+          awardOrg: "",
+          award: "",
+          awardDate: "",
+        },
+      ],
     },
   });
 
@@ -591,7 +630,8 @@ function AnketForm() {
                     });
                   }}
                 >
-                  <ListPlus color="green" size={18} /> Мөр нэмэх
+                  <ListPlus color="green" size={18} />{" "}
+                  <p className="pl-1">Мөр нэмэх</p>
                 </Button>
               </TableBody>
             </Table>
@@ -762,7 +802,8 @@ function AnketForm() {
                     });
                   }}
                 >
-                  <ListPlus color="green" size={18} /> Мөр нэмэх
+                  <ListPlus color="green" size={18} />{" "}
+                  <p className="pl-1">Мөр нэмэх</p>
                 </Button>
               </TableBody>
             </Table>
@@ -896,7 +937,8 @@ function AnketForm() {
                     });
                   }}
                 >
-                  <ListPlus color="green" size={18} /> Мөр нэмэх
+                  <ListPlus color="green" size={18} />{" "}
+                  <p className="pl-1">Мөр нэмэх</p>
                 </Button>
               </TableBody>
             </Table>
@@ -1052,7 +1094,8 @@ function AnketForm() {
                     });
                   }}
                 >
-                  <ListPlus color="green" size={18} /> Мөр нэмэх
+                  <ListPlus color="green" size={18} />{" "}
+                  <p className="pl-1">Мөр нэмэх</p>
                 </Button>
               </TableBody>
             </Table>
@@ -1138,7 +1181,8 @@ function AnketForm() {
                     });
                   }}
                 >
-                  <ListPlus color="green" size={18} /> Мөр нэмэх
+                  <ListPlus color="green" size={18} />{" "}
+                  <p className="pl-1">Мөр нэмэх</p>
                 </Button>
               </TableBody>
             </Table>
@@ -1244,7 +1288,8 @@ function AnketForm() {
                     });
                   }}
                 >
-                  <ListPlus color="green" size={18} /> Мөр нэмэх
+                  <ListPlus color="green" size={18} />{" "}
+                  <p className="pl-1">Мөр нэмэх</p>
                 </Button>
               </TableBody>
             </Table>
@@ -1357,7 +1402,8 @@ function AnketForm() {
                     });
                   }}
                 >
-                  <ListPlus color="green" size={18} /> Мөр нэмэх
+                  <ListPlus color="green" size={18} />
+                  <p className="pl-1">Мөр нэмэх</p>
                 </Button>
               </TableBody>
             </Table>
