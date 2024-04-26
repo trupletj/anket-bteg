@@ -1,5 +1,13 @@
 import Link from "next/link";
-import { CircleUser, Menu, Package2, Search } from "lucide-react";
+import {
+  CircleUser,
+  Menu,
+  Package2,
+  Search,
+  MapPin,
+  Building2,
+  Calendar,
+} from "lucide-react";
 
 import { Label } from "@/components/ui/label";
 import {
@@ -151,16 +159,72 @@ export default function Home() {
             <form className="grid w-full items-start gap-6">
               <fieldset className="grid gap-6 rounded-lg border p-4">
                 <legend className="-ml-1 px-1 text-sm font-medium">
-                  Settings
+                  Шүүлтүүр
                 </legend>
                 <div className="grid gap-3">
-                  <Label htmlFor="model">Model</Label>
+                  <Label htmlFor="model">Компани</Label>
                   <Select>
                     <SelectTrigger
                       id="model"
                       className="items-start [&_[data-description]]:hidden"
                     >
-                      <SelectValue placeholder="Select a model" />
+                      <SelectValue placeholder="-----" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="genesis">
+                        <div className="flex items-start gap-3 text-muted-foreground">
+                          <div className="grid gap-0.5">
+                            <p>
+                              Neural{" "}
+                              <span className="font-medium text-foreground">
+                                Genesis
+                              </span>
+                            </p>
+                            <p className="text-xs" data-description>
+                              Our fastest model for general use cases.
+                            </p>
+                          </div>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="explorer">
+                        <div className="flex items-start gap-3 text-muted-foreground">
+                          <div className="grid gap-0.5">
+                            <p>
+                              Neural{" "}
+                              <span className="font-medium text-foreground">
+                                Explorer
+                              </span>
+                            </p>
+                            <p className="text-xs" data-description>
+                              Performance and speed for efficiency.
+                            </p>
+                          </div>
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="quantum">
+                        <div className="flex items-start gap-3 text-muted-foreground">
+                          <div className="grid gap-0.5">
+                            <p>
+                              Neural{" "}
+                              <span className="font-medium text-foreground">
+                                Quantum
+                              </span>
+                            </p>
+                            <p className="text-xs" data-description>
+                              The most powerful model for complex computations.
+                            </p>
+                          </div>
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Label htmlFor="model">Байршил</Label>
+                  <Select>
+                    <SelectTrigger
+                      id="model"
+                      className="items-start [&_[data-description]]:hidden"
+                    >
+                      <SelectValue placeholder="-----" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="genesis">
@@ -211,7 +275,7 @@ export default function Home() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="grid gap-3">
+                {/* <div className="grid gap-3">
                   <Label htmlFor="temperature">Temperature</Label>
                   <Input id="temperature" type="number" placeholder="0.4" />
                 </div>
@@ -224,7 +288,7 @@ export default function Home() {
                     <Label htmlFor="top-k">Top K</Label>
                     <Input id="top-k" type="number" placeholder="0.0" />
                   </div>
-                </div>
+                </div> */}
               </fieldset>
               <fieldset className="grid gap-6 rounded-lg border p-4">
                 <legend className="-ml-1 px-1 text-sm font-medium">
@@ -258,15 +322,33 @@ export default function Home() {
                       <CardTitle>Хүний нөөцийн мэргэжилтэн</CardTitle>
                     </AccordionTrigger>
                     <CardDescription>
-                      Used to identify your store in the marketplace.
+                      <div className="flex items-center space-x-4">
+                        <span className="flex items-center space-x-1">
+                          <MapPin className="size-4" /> <p>Сэлэнгэ, Ерөө</p>
+                        </span>
+                        <span className="flex items-center space-x-1">
+                          <Building2 className="size-4" />
+                          <p>Болдтөмөр Ерөө Гол</p>
+                        </span>
+                      </div>
                     </CardDescription>
                   </CardHeader>
                   <AccordionContent>
                     <CardContent>Ajiliin bairnii delgerengui</CardContent>
                   </AccordionContent>
 
-                  <CardFooter className="border-t px-6 py-4">
+                  <CardFooter className="border-t px-6 py-4 flex justify-between">
                     <Button>Дэлгэрэнгүй</Button>
+                    <div className="flex items-center space-x-4">
+                      <span className="flex items-center space-x-1">
+                        <Calendar className="size-4" /> <p>Нээлтийн огноо: </p>
+                        <p>2024-04-29</p>
+                      </span>
+                      <span className="flex items-center space-x-1">
+                        <Calendar className="size-4" /> <p>Хаалтын огноо: </p>
+                        <p>2024-04-29</p>
+                      </span>
+                    </div>
                   </CardFooter>
                 </Card>
               </AccordionItem>
