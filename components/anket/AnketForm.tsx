@@ -56,7 +56,7 @@ const formSchema = z.object({
   email: z.string().min(2, {
     message: "Firstname must be at least 2 characters.",
   }),
-  register_number: z.string().min(2, {
+  registerNumber: z.string().min(2, {
     message: "Firstname must be at least 2 characters.",
   }),
   sex: z.enum(["male", "female"], {
@@ -66,13 +66,13 @@ const formSchema = z.object({
     message: "utas must be at least 8 characters.",
   }),
   // Orshin suugaa hayag
-  address_home: z.object({
+  addressHome: z.object({
     city: z.string(),
     district: z.string(),
     address: z.string(),
   }),
   // Unemlehnii Hayag
-  address_permanent: z.object({
+  addressPermanent: z.object({
     city: z.string(),
     district: z.string(),
     address: z.string(),
@@ -87,8 +87,8 @@ const formSchema = z.object({
   educationInfo: z.array(
     z.object({
       schoolName: z.string(),
-      start_date: z.string(),
-      end_date: z.string(),
+      startDate: z.string(),
+      endDate: z.string(),
       profession: z.string(),
       edu_degree: z.string(),
       gpa: z.string(),
@@ -97,17 +97,17 @@ const formSchema = z.object({
   coursesInfo: z.array(
     z.object({
       courseName: z.string(),
-      start_date: z.string(),
-      end_date: z.string(),
+      startDate: z.string(),
+      endDate: z.string(),
       profession: z.string(),
     })
   ),
-  jobHistory: z.array(
+  workHistory: z.array(
     z.object({
       companyName: z.string(),
       jobPosition: z.string(),
-      start_date: z.string(),
-      end_date: z.string(),
+      startDate: z.string(),
+      endDate: z.string(),
       dismissalReason: z.string(),
     })
   ),
@@ -148,8 +148,8 @@ function AnketForm() {
       educationInfo: [
         {
           schoolName: "",
-          start_date: "",
-          end_date: "",
+          startDate: "",
+          endDate: "",
           profession: "",
           edu_degree: "",
           gpa: "",
@@ -165,18 +165,18 @@ function AnketForm() {
       coursesInfo: [
         {
           courseName: "",
-          start_date: "",
-          end_date: "",
+          startDate: "",
+          endDate: "",
           profession: "",
         },
       ],
 
-      jobHistory: [
+      workHistory: [
         {
           companyName: "",
           jobPosition: "",
-          start_date: "",
-          end_date: "",
+          startDate: "",
+          endDate: "",
           dismissalReason: "",
         },
       ],
@@ -221,10 +221,10 @@ function AnketForm() {
     remove: coursesInfoRemove,
   } = useFieldArray({ control: form.control, name: "coursesInfo" });
   const {
-    fields: jobHistoryFields,
-    append: jobHistoryAppend,
-    remove: jobHistoryRemove,
-  } = useFieldArray({ control: form.control, name: "jobHistory" });
+    fields: workHistoryFields,
+    append: workHistoryAppend,
+    remove: workHistoryRemove,
+  } = useFieldArray({ control: form.control, name: "workHistory" });
   const {
     fields: computerKnowledgeFields,
     append: computerKnowledgeAppend,
@@ -304,7 +304,7 @@ function AnketForm() {
 
               <FormField
                 control={form.control}
-                name="register_number"
+                name="registerNumber"
                 render={({ field }) => (
                   <FormItem className={cnFormItem}>
                     <FormLabel className={cnFormLabel}>РД*</FormLabel>
@@ -392,7 +392,7 @@ function AnketForm() {
                 <div className="flex space-x-4">
                   <FormField
                     control={form.control}
-                    name="address_permanent.city"
+                    name="addressPermanent.city"
                     render={({ field }) => (
                       <FormItem className="">
                         <Select onValueChange={field.onChange}>
@@ -414,7 +414,7 @@ function AnketForm() {
                   />
                   <FormField
                     control={form.control}
-                    name="address_permanent.district"
+                    name="addressPermanent.district"
                     render={({ field }) => (
                       <FormItem className="">
                         <Select onValueChange={field.onChange}>
@@ -438,7 +438,7 @@ function AnketForm() {
                   />
                   <FormField
                     control={form.control}
-                    name="address_permanent.address"
+                    name="addressPermanent.address"
                     render={({ field }) => (
                       <FormItem className={cnFormItem}>
                         <FormControl className={cnFormControl}>
@@ -461,7 +461,7 @@ function AnketForm() {
                 <div className="flex space-x-4">
                   <FormField
                     control={form.control}
-                    name="address_home.city"
+                    name="addressHome.city"
                     render={({ field }) => (
                       <FormItem className="">
                         <Select onValueChange={field.onChange}>
@@ -483,7 +483,7 @@ function AnketForm() {
                   />
                   <FormField
                     control={form.control}
-                    name="address_home.district"
+                    name="addressHome.district"
                     render={({ field }) => (
                       <FormItem className="">
                         <Select onValueChange={field.onChange}>
@@ -507,7 +507,7 @@ function AnketForm() {
                   />
                   <FormField
                     control={form.control}
-                    name="address_home.address"
+                    name="addressHome.address"
                     render={({ field }) => (
                       <FormItem className={cnFormItem}>
                         <FormControl className={cnFormControl}>
@@ -648,8 +648,8 @@ function AnketForm() {
           <CardContent>
             {/* shine section ger bul
             schoolName: z.string(),
-            start_date: z.string(),
-            end_date: z.string(),
+            startDate: z.string(),
+            endDate: z.string(),
             profession: z.string(),
             edu_degree: z.string(), 
             gpa: z.string(),
@@ -691,7 +691,7 @@ function AnketForm() {
                       <TableCell>
                         <FormField
                           control={form.control}
-                          name={`educationInfo.${index}.start_date`}
+                          name={`educationInfo.${index}.startDate`}
                           render={({ field }) => (
                             <FormItem className={cnFormItem}>
                               <FormControl className={cnFormControl}>
@@ -709,7 +709,7 @@ function AnketForm() {
                       <TableCell>
                         <FormField
                           control={form.control}
-                          name={`educationInfo.${index}.end_date`}
+                          name={`educationInfo.${index}.endDate`}
                           render={({ field }) => (
                             <FormItem className={cnFormItem}>
                               <FormControl className={cnFormControl}>
@@ -794,8 +794,8 @@ function AnketForm() {
                   onClick={() => {
                     educationInfoAppend({
                       schoolName: "",
-                      start_date: "",
-                      end_date: "",
+                      startDate: "",
+                      endDate: "",
                       profession: "",
                       edu_degree: "",
                       gpa: "",
@@ -822,8 +822,8 @@ function AnketForm() {
             </CardDescription> */}
           </CardHeader>
           {/* courseName: z.string(),
-              start_date: z.string(),
-              end_date: z.string(),
+              startDate: z.string(),
+              endDate: z.string(),
               profession: z.string(), */}
           <CardContent>
             <Table>
@@ -863,7 +863,7 @@ function AnketForm() {
                       <TableCell>
                         <FormField
                           control={form.control}
-                          name={`coursesInfo.${index}.start_date`}
+                          name={`coursesInfo.${index}.startDate`}
                           render={({ field }) => (
                             <FormItem className={cnFormItem}>
                               <FormControl className={cnFormControl}>
@@ -881,7 +881,7 @@ function AnketForm() {
                       <TableCell>
                         <FormField
                           control={form.control}
-                          name={`coursesInfo.${index}.end_date`}
+                          name={`coursesInfo.${index}.endDate`}
                           render={({ field }) => (
                             <FormItem className={cnFormItem}>
                               <FormControl className={cnFormControl}>
@@ -931,8 +931,8 @@ function AnketForm() {
                   onClick={() => {
                     coursesInfoAppend({
                       courseName: "",
-                      start_date: "",
-                      end_date: "",
+                      startDate: "",
+                      endDate: "",
                       profession: "",
                     });
                   }}
@@ -955,12 +955,12 @@ function AnketForm() {
           </CardHeader>
           <CardContent>
             {/* shine section ger bul
-            jobHistory: z.array(
+            workHistory: z.array(
             z.object({
               companyName: z.string(),
               jobPosition: z.string(),
-              start_date: z.string(),
-              end_date: z.string(),
+              startDate: z.string(),
+              endDate: z.string(),
               dismissalReason: z.string(),
             })
           ),
@@ -977,13 +977,13 @@ function AnketForm() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {jobHistoryFields.map((item, index) => {
+                {workHistoryFields.map((item, index) => {
                   return (
                     <TableRow key={item.id}>
                       <TableCell className="font-medium">
                         <FormField
                           control={form.control}
-                          name={`jobHistory.${index}.companyName`}
+                          name={`workHistory.${index}.companyName`}
                           render={({ field }) => (
                             <FormItem className={cnFormItem}>
                               <FormControl className={cnFormControl}>
@@ -1001,7 +1001,7 @@ function AnketForm() {
                       <TableCell className="font-medium">
                         <FormField
                           control={form.control}
-                          name={`jobHistory.${index}.jobPosition`}
+                          name={`workHistory.${index}.jobPosition`}
                           render={({ field }) => (
                             <FormItem className={cnFormItem}>
                               <FormControl className={cnFormControl}>
@@ -1019,7 +1019,7 @@ function AnketForm() {
                       <TableCell>
                         <FormField
                           control={form.control}
-                          name={`jobHistory.${index}.start_date`}
+                          name={`workHistory.${index}.startDate`}
                           render={({ field }) => (
                             <FormItem className={cnFormItem}>
                               <FormControl className={cnFormControl}>
@@ -1037,7 +1037,7 @@ function AnketForm() {
                       <TableCell>
                         <FormField
                           control={form.control}
-                          name={`jobHistory.${index}.end_date`}
+                          name={`workHistory.${index}.endDate`}
                           render={({ field }) => (
                             <FormItem className={cnFormItem}>
                               <FormControl className={cnFormControl}>
@@ -1055,7 +1055,7 @@ function AnketForm() {
                       <TableCell>
                         <FormField
                           control={form.control}
-                          name={`jobHistory.${index}.dismissalReason`}
+                          name={`workHistory.${index}.dismissalReason`}
                           render={({ field }) => (
                             <FormItem className={cnFormItem}>
                               <FormControl className={cnFormControl}>
@@ -1074,7 +1074,7 @@ function AnketForm() {
                       <TableCell className="text-right">
                         <button
                           type="button"
-                          onClick={() => jobHistoryRemove(index)}
+                          onClick={() => workHistoryRemove(index)}
                         >
                           <Trash2 color="red" size={18} />
                         </button>
@@ -1085,10 +1085,10 @@ function AnketForm() {
                 <Button
                   type="button"
                   onClick={() => {
-                    jobHistoryAppend({
+                    workHistoryAppend({
                       companyName: "",
-                      start_date: "",
-                      end_date: "",
+                      startDate: "",
+                      endDate: "",
                       jobPosition: "",
                       dismissalReason: "",
                     });
@@ -1306,8 +1306,8 @@ function AnketForm() {
           <CardContent>
             {/* shine section ger bul
             schoolName: z.string(),
-            start_date: z.string(),
-            end_date: z.string(),
+            startDate: z.string(),
+            endDate: z.string(),
             profession: z.string(),
             edu_degree: z.string(), 
             gpa: z.string(),

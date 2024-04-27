@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 import Link from "next/link";
 import {
   CircleUser,
@@ -46,7 +48,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-export default function Home() {
+import { getJobs } from "@/lib/prisma/jobs";
+
+export default async function Home() {
+  const jobs = await getJobs({
+    include: {
+      jobLocation: true,
+      organization: true,
+    },
+  });
+  // if (error) {
+  //   throw error;
+  // }
   return (
     <div className="flex min-h-screen w-full flex-col">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -313,8 +326,50 @@ export default function Home() {
               </fieldset>
             </form>
           </div>
-          <div className="grid gap-6">
-            <Accordion type="single" collapsible>
+          <div className="">
+            <Accordion type="single" collapsible className="grid gap-4">
+              {jobs.map((job: any) => (
+                <AccordionItem key={job.id} value={job.id}>
+                  <Card>
+                    <CardHeader>
+                      <AccordionTrigger>
+                        <CardTitle>{job.name}</CardTitle>
+                      </AccordionTrigger>
+                      <CardDescription>
+                        <div className="flex items-center space-x-4">
+                          <span className="flex items-center space-x-1">
+                            <MapPin className="size-4" />{" "}
+                            <p>{job.jobLocation.name}</p>
+                          </span>
+                          <span className="flex items-center space-x-1">
+                            <Building2 className="size-4" />
+                            <p>{job.organization.name}</p>
+                          </span>
+                        </div>
+                      </CardDescription>
+                    </CardHeader>
+                    <AccordionContent>
+                      <CardContent>{JSON.stringify(jobs, null, 2)}</CardContent>
+                    </AccordionContent>
+
+                    <CardFooter className="border-t px-6 py-4 flex justify-between">
+                      <Button>Дэлгэрэнгүй</Button>
+                      <div className="flex items-center space-x-4">
+                        <span className="flex items-center space-x-1">
+                          <Calendar className="size-4" />{" "}
+                          <p>Нээлтийн огноо: </p>
+                          <p>{format(job.openingAt, "PPP")}</p>
+                        </span>
+                        <span className="flex items-center space-x-1">
+                          <Calendar className="size-4" /> <p>Хаалтын огноо: </p>
+                          <p>{job.endDate}</p>
+                        </span>
+                      </div>
+                    </CardFooter>
+                  </Card>
+                </AccordionItem>
+              ))}
+
               <AccordionItem value="item-1">
                 <Card>
                   <CardHeader>
