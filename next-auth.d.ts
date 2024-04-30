@@ -1,7 +1,7 @@
 import NextAuth, { DefaultSession } from "next-auth";
 
 export type ExtendedUser = DefaultSession["user"] & {
-  role: "ADMIN" | "USER";
+  role: "ADMIN" | "USER" | "GUEST";
 };
 
 declare module "next-auth" {
@@ -12,7 +12,8 @@ declare module "next-auth" {
     user: {
       /** The user's postal address. */
       address: string;
-      role: "ADMIN" | "USER";
+      role: "ADMIN" | "USER" | "GUEST";
+      verified: boolean;
       /**
        * By default, TypeScript merges new interface properties and overwrites existing ones.
        * In this case, the default session user properties will be overwritten,

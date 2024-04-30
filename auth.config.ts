@@ -24,6 +24,8 @@ export default {
     //     return null;
     //   },
     // }),
-    Google,
+    Google({
+      allowDangerousEmailAccountLinking: true,
+    }),
   ],
 };

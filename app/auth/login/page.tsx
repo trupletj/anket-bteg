@@ -1,5 +1,4 @@
-"use client";
-
+import { auth, signIn } from "@/auth";
 import Link from "next/link";
 import * as z from "zod";
 import { useState, useTransition } from "react";
@@ -33,38 +32,46 @@ import { log } from "console";
 import { set } from "date-fns";
 
 export default function LoginForm() {
-  const [isPending, startTransition] = useTransition();
+  // const [isPending, startTransition] = useTransition();
 
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
+  // const [error, setError] = useState<string | undefined>("");
+  // const [success, setSuccess] = useState<string | undefined>("");
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+  // const form = useForm<z.infer<typeof LoginSchema>>({
+  //   resolver: zodResolver(LoginSchema),
+  //   defaultValues: {
+  //     email: "",
+  //     password: "",
+  //   },
+  // });
 
-  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    setError("");
-    setSuccess("");
-    startTransition(() => {
-      login(values).then((data) => {
-        setError(data?.error);
-      });
-    });
-  };
+  // const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+  //   setError("");
+  //   setSuccess("");
+  //   startTransition(() => {
+  //     login(values).then((data) => {
+  //       setError(data?.error);
+  //     });
+  //   });
+  // };
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
-        <CardDescription>
-          Enter your email below to login to your account
-        </CardDescription>
+        <CardTitle className="text-2xl">Нэвтрэх</CardTitle>
+        <CardDescription>Google бүртгэлээ ашиглана уу</CardDescription>
       </CardHeader>
       <CardContent>
-        {error && (
+        <form
+          action={async () => {
+            "use server";
+            await signIn("google", { redirectTo: "/auth/login" });
+          }}
+        >
+          <Button className="w-full" type="submit">
+            Login with Google
+          </Button>
+        </form>
+        {/* {error && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Алдаа</AlertTitle>
@@ -77,8 +84,8 @@ export default function LoginForm() {
             <AlertTitle>Амжилттай</AlertTitle>
             <AlertDescription>{success}</AlertDescription>
           </Alert>
-        )}
-        <Form {...form}>
+        )} */}
+        {/* <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="grid gap-4">
               <div className="grid gap-2">
@@ -125,7 +132,7 @@ export default function LoginForm() {
               <Button disabled={isPending} type="submit" className="w-full">
                 Login
               </Button>
-              <Button disabled={true} variant="outline" className="w-full">
+              <Button variant="outline" className="w-full">
                 Login with Google
               </Button>
             </div>
@@ -136,7 +143,9 @@ export default function LoginForm() {
               </Link>
             </div>
           </form>
-        </Form>
+
+          
+        </Form> */}
       </CardContent>
     </Card>
   );

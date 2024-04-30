@@ -1,5 +1,6 @@
 import React from "react";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
+import { logout } from "@/actions/logout";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -9,16 +10,13 @@ import {
   LineChart,
   Package,
   Package2,
-  Settings,
   ShoppingCart,
   Users2,
   PanelLeft,
   Search,
 } from "lucide-react";
-
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -33,12 +31,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 async function Nav() {
   const session = await auth();
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-      <h1> SESSEION : {JSON.stringify(session)}</h1>
       <Sheet>
         <SheetTrigger asChild>
           <Button size="icon" variant="outline" className="sm:hidden">
@@ -126,7 +124,12 @@ async function Nav() {
             variant="outline"
             size="icon"
             className="overflow-hidden rounded-full"
-          ></Button>
+          >
+            <Avatar>
+              <AvatarImage src={session?.user.image ?? ""} />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -138,10 +141,10 @@ async function Nav() {
             <form
               action={async () => {
                 "use server";
-                await signOut({ redirectTo: "/auth/login" });
+                await logout();
               }}
             >
-              <button type="submit">Системээс гарах</button>
+              <Button type="submit">Системээс гарах</Button>
             </form>
           </DropdownMenuItem>
         </DropdownMenuContent>

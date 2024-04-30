@@ -3,21 +3,46 @@ import authConfig from "@/auth.config";
 import prisma from "@/lib/prisma";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
-import { getUserById } from "@/lib/prisma/users";
+import { getUserById, getUserByEmail } from "@/lib/prisma/users";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  pages: {
+    signIn: "/auth/login",
+    signOut: "/auth/logout",
+    error: "/auth/error",
+  },
+  events: {
+    async linkAccount({ account, user, profile }) {
+      if (account?.provider === "google") {
+        await prisma.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            image: profile.image,
+          },
+        });
+      }
+    },
+  },
   callbacks: {
     async signIn({ user, account, profile }) {
-      console.log(profile);
       // if (account.provider === 'google' && profile.verified_email === true) {
       //   return true
       // }
-      return true;
+      if (profile?.email) {
+        const existingUser = await getUserByEmail(profile.email);
+        if (!existingUser) {
+          return false;
+        }
+        return true;
+      }
+
+      return false;
     },
 
     async session({ session, token, user }) {
-      // `session.user.address` is now a valid property, and will be type-checked
-      // in places like `useSession().data.user` or `auth().user`
+      console.log("session", user);
       return {
         ...session,
         user: {
@@ -34,6 +59,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (!existingUser) return token;
 
       token.role = existingUser.role;
+
       return token;
     },
   },

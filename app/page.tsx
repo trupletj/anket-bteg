@@ -339,11 +339,11 @@ export default async function Home() {
                         <div className="flex items-center space-x-4">
                           <span className="flex items-center space-x-1">
                             <MapPin className="size-4" />{" "}
-                            <p>{job.jobLocation.name}</p>
+                            <p>{job.jobLocation?.name}</p>
                           </span>
                           <span className="flex items-center space-x-1">
                             <Building2 className="size-4" />
-                            <p>{job.organization.name}</p>
+                            <p>{job.organization?.name}</p>
                           </span>
                         </div>
                       </CardDescription>
