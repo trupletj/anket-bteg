@@ -36,7 +36,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,10 +55,13 @@ export default async function Home() {
       jobLocation: true,
       organization: true,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
   // if (error) {
   //   throw error;
-  // }
+  // } 
   return (
     <div className="flex min-h-screen w-full flex-col">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -153,17 +155,14 @@ export default async function Home() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuLabel>
+                <Link href="/dashboard"> Нэвтрэх</Link>
+              </DropdownMenuLabel>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </header>
-      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/80 p-4 md:gap-8 md:p-10">
         <div className="mx-auto grid w-full max-w-6xl gap-2">
           <h1 className="text-3xl font-semibold">Нээлттэй ажлын байрууд</h1>
         </div>
@@ -362,89 +361,13 @@ export default async function Home() {
                         </span>
                         <span className="flex items-center space-x-1">
                           <Calendar className="size-4" /> <p>Хаалтын огноо: </p>
-                          <p>{job.endDate}</p>
+                          <p>{format(job.closingAt, "PPP")}</p>
                         </span>
                       </div>
                     </CardFooter>
                   </Card>
                 </AccordionItem>
               ))}
-
-              <AccordionItem value="item-1">
-                <Card>
-                  <CardHeader>
-                    <AccordionTrigger>
-                      <CardTitle>Хүний нөөцийн мэргэжилтэн</CardTitle>
-                    </AccordionTrigger>
-                    <CardDescription>
-                      <div className="flex items-center space-x-4">
-                        <span className="flex items-center space-x-1">
-                          <MapPin className="size-4" /> <p>Сэлэнгэ, Ерөө</p>
-                        </span>
-                        <span className="flex items-center space-x-1">
-                          <Building2 className="size-4" />
-                          <p>Болдтөмөр Ерөө Гол</p>
-                        </span>
-                      </div>
-                    </CardDescription>
-                  </CardHeader>
-                  <AccordionContent>
-                    <CardContent>Ajiliin bairnii delgerengui</CardContent>
-                  </AccordionContent>
-
-                  <CardFooter className="border-t px-6 py-4 flex justify-between">
-                    <Button>Дэлгэрэнгүй</Button>
-                    <div className="flex items-center space-x-4">
-                      <span className="flex items-center space-x-1">
-                        <Calendar className="size-4" /> <p>Нээлтийн огноо: </p>
-                        <p>2024-04-29</p>
-                      </span>
-                      <span className="flex items-center space-x-1">
-                        <Calendar className="size-4" /> <p>Хаалтын огноо: </p>
-                        <p>2024-04-29</p>
-                      </span>
-                    </div>
-                  </CardFooter>
-                </Card>
-              </AccordionItem>
-              <AccordionItem value="item-2">
-                <Card>
-                  <CardHeader>
-                    <AccordionTrigger>
-                      <CardTitle>Хүний нөөцийн мэргэжилтэн</CardTitle>
-                    </AccordionTrigger>
-                    <CardDescription>
-                      Used to identify your store in the marketplace.
-                    </CardDescription>
-                  </CardHeader>
-                  <AccordionContent>
-                    <CardContent>Ajiliin bairnii delgerengui</CardContent>
-                  </AccordionContent>
-
-                  <CardFooter className="border-t px-6 py-4">
-                    <Button>Дэлгэрэнгүй</Button>
-                  </CardFooter>
-                </Card>
-              </AccordionItem>
-              <AccordionItem value="item-6">
-                <Card>
-                  <CardHeader>
-                    <AccordionTrigger>
-                      <CardTitle>Хүний нөөцийн мэргэжилтэн</CardTitle>
-                    </AccordionTrigger>
-                    <CardDescription>
-                      Used to identify your store in the marketplace.
-                    </CardDescription>
-                  </CardHeader>
-                  <AccordionContent>
-                    <CardContent>Ajiliin bairnii delgerengui</CardContent>
-                  </AccordionContent>
-
-                  <CardFooter className="border-t px-6 py-4">
-                    <Button>Дэлгэрэнгүй</Button>
-                  </CardFooter>
-                </Card>
-              </AccordionItem>
             </Accordion>
           </div>
         </div>

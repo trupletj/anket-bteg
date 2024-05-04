@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter, useParams } from "next/navigation";
 import * as z from "zod";
 import { useState, useTransition } from "react";
 import { RegisterSchema } from "@/lib/schemas";
+
 import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -24,44 +25,59 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { register } from "@/actions/register";
+import { addUser, editUser } from "@/actions/users";
+import { AvatarImage, Avatar, AvatarFallback } from "@/components/ui/avatar";
 
-export default function RegisterForm() {
+export default function UserEditForm({ user }: { user: any }) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
 
+  //   const user = await findUserById(userId);
+
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      email: "",
-      password: "",
-      name: "",
+      email: user?.email,
+      name: user?.name,
     },
   });
+  console.log("render");
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
     setError("");
     setSuccess("");
     startTransition(() => {
-      register(values).then((data) => {
+      editUser(user.id, values).then((data) => {
         setError(data.error);
         setSuccess(data.success);
+        if (data.success) {
+          form.reset();
+          router.push("/dashboard/users");
+        }
       });
     });
   };
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="">
       <CardHeader>
-        <CardTitle className="text-2xl">Бүртгүүлэх</CardTitle>
-        <CardDescription>Мэдээллээ оруулна уу</CardDescription>
+        <CardTitle className="text-xl">Хэрэглэгчийн мэдээлэл</CardTitle>
+        <CardDescription>
+          Зөвхөн Gmail account-н mail хаяг бүртгэх шаардлагатайг анхаарна уу.
+        </CardDescription>
       </CardHeader>
       <CardContent>
+        <Avatar className="mx-auto ">
+          <AvatarImage src={user?.image} alt="avatar" />
+          <AvatarFallback className="uppercase">
+            {user?.name.charAt(0)}
+          </AvatarFallback>
+        </Avatar>
         {error && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
@@ -107,7 +123,7 @@ export default function RegisterForm() {
                       <FormLabel htmlFor="email">Email</FormLabel>
                       <FormControl>
                         <Input
-                          disabled={isPending}
+                          disabled={true}
                           id="email"
                           type="email"
                           placeholder="example@gmail.com"
@@ -118,39 +134,16 @@ export default function RegisterForm() {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="password">Password</FormLabel>
-                      <FormControl>
-                        <Input
-                          disabled={isPending}
-                          id="password"
-                          type="password"
-                          placeholder="******"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
 
-              <Button disabled={isPending} type="submit" className="w-full">
-                Login
-              </Button>
-              <Button disabled={true} variant="outline" className="w-full">
-                Login with Google
-              </Button>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link href="/auth/register" className="underline">
-                Sign up
-              </Link>
+              <div className="grid grid-cols-2 gap-4">
+                <Button disabled={isPending} variant={"destructive"} size="sm">
+                  Хэрэглэгч устгах
+                </Button>
+                <Button disabled={isPending} type="submit" size="sm">
+                  Хадгалах
+                </Button>
+              </div>
             </div>
           </form>
         </Form>
@@ -158,4 +151,3 @@ export default function RegisterForm() {
     </Card>
   );
 }
-

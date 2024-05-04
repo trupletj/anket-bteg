@@ -1,10 +1,15 @@
 "use client";
+import { useTransition, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { JobSchema } from "@/lib/schemas";
-import { ChevronLeft, Upload, CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
+import { ChevronLeft, Upload, CalendarIcon, Save } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+import { format, formatRelative } from "date-fns";
+import { mn } from "date-fns/locale";
+
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -30,6 +35,16 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import {
   Form,
   FormControl,
   FormDescription,
@@ -44,45 +59,86 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { createJobForm } from "@/actions/createJobForm";
+import { saveJobForm } from "@/actions/jobs";
+import { useToast } from "@/components/ui/use-toast";
 
-function CreateJobForm() {
+function CreateJobForm({
+  jobLocations,
+  organizations,
+}: {
+  jobLocations: any[];
+  organizations: any[];
+}) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
+
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof JobSchema>>({
     resolver: zodResolver(JobSchema),
     defaultValues: {
       name: "",
       description: "",
+      organizationId: "",
+      jobLocationId: "",
     },
   });
-  async function onSubmit(values: z.infer<typeof JobSchema>) {
-    console.log(values);
-    form.reset();
-    // Do something with the form values.s
-    // ✅ This will be type-safe and validated.
-    await createJobForm(values);
+  function onSubmit(values: any) {
+    setError("");
+    setSuccess("");
+    startTransition(() => {
+      saveJobForm(values).then((data) => {
+        setError(data?.error);
+        setError(data?.success);
+        if (data.success) {
+          form.reset();
+          toast({
+            title: "Амжилттай",
+            description: "Ажлын зар амжилттай хадгалагдлаа",
+          });
+          router.push("/dashboard/jobs");
+        }
+      });
+    });
   }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="icon" className="h-7 w-7">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-7 w-7"
+              type="button"
+              onClick={() => {
+                router.push("/dashboard/jobs");
+              }}
+            >
               <ChevronLeft className="h-4 w-4" />
               <span className="sr-only">Back</span>
             </Button>
             <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-              Pro Controller
+              Шинэ ажлын зар оруулах
             </h1>
             <Badge variant="outline" className="ml-auto sm:ml-0">
-              In stock
+              Шинэ
             </Badge>
             <div className="hidden items-center gap-2 md:ml-auto md:flex">
-              <Button variant="outline" size="sm">
-                Discard
-              </Button>
-              <Button size="sm" type="submit">
-                Save Product
+              {/* <Button variant="outline" size="sm">
+                Цуцлах
+              </Button> */}
+              <Button
+                disabled={isPending}
+                size="sm"
+                type="submit"
+                className="h-8 gap-1"
+              >
+                <Save className="h-3.5 w-3.5 text-green-500" />
+                <span>Хадгалах</span>
               </Button>
             </div>
           </div>
@@ -90,9 +146,9 @@ function CreateJobForm() {
             <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
               <Card>
                 <CardHeader>
-                  <CardTitle>Product Details</CardTitle>
+                  <CardTitle>Үндсэн мэдээлэл</CardTitle>
                   <CardDescription>
-                    Lipsum dolor sit amet, consectetur adipiscing elit
+                    Ажлын байрны мэдээллийг бүрэн оруулна уу
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -122,9 +178,9 @@ function CreateJobForm() {
                           <FormLabel>Тайлбар</FormLabel>
                           <FormControl>
                             <Textarea
+                              className=" min-h-[400px]"
+                              placeholder="Тавигдах шаардлага"
                               {...field}
-                              id="description"
-                              className="min-h-32"
                             />
                           </FormControl>
 
@@ -138,10 +194,10 @@ function CreateJobForm() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Product Category</CardTitle>
+                  <CardTitle>Хугацааны мэдээлэл сонгох</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-6 gap-6 sm:grid-cols-3">
+                  <div className="grid grid-cols-6 gap-6 ">
                     <FormField
                       control={form.control}
                       name="openingAt"
@@ -159,9 +215,9 @@ function CreateJobForm() {
                                   )}
                                 >
                                   {field.value ? (
-                                    format(field.value, "PPP")
+                                    format(field.value, "PPP", { locale: mn })
                                   ) : (
-                                    <span>Pick a date</span>
+                                    <span>Огноо сонгоно уу</span>
                                   )}
                                   <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                 </Button>
@@ -175,16 +231,11 @@ function CreateJobForm() {
                                 mode="single"
                                 selected={field.value}
                                 onSelect={field.onChange}
-                                disabled={(date) =>
-                                  date > new Date() ||
-                                  date < new Date("1900-01-01")
-                                }
-                                initialFocus
                               />
                             </PopoverContent>
                           </Popover>
                           <FormDescription>
-                            Your date of birth is used to calculate your age.
+                            Анкет хүлээн авах нээлтийн огноо
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -207,9 +258,9 @@ function CreateJobForm() {
                                   )}
                                 >
                                   {field.value ? (
-                                    format(field.value, "PPP")
+                                    format(field.value, "PPP", { locale: mn })
                                   ) : (
-                                    <span>Pick a date</span>
+                                    <span>Огноо сонгоно уу</span>
                                   )}
                                   <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                 </Button>
@@ -223,61 +274,16 @@ function CreateJobForm() {
                                 mode="single"
                                 selected={field.value}
                                 onSelect={field.onChange}
-                                disabled={(date) =>
-                                  date > new Date() ||
-                                  date < new Date("1900-01-01")
-                                }
-                                initialFocus
                               />
                             </PopoverContent>
                           </Popover>
                           <FormDescription>
-                            Your date of birth is used to calculate your age.
+                            Анкет хүлээн авах сүүлийн огноо
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    {/* <div className="grid gap-3">
-                      <Label htmlFor="category">Category</Label>
-                      <Select>
-                        <SelectTrigger
-                          id="category"
-                          aria-label="Select category"
-                        >
-                          <SelectValue placeholder="Select category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="clothing">Clothing</SelectItem>
-                          <SelectItem value="electronics">
-                            Electronics
-                          </SelectItem>
-                          <SelectItem value="accessories">
-                            Accessories
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="grid gap-3">
-                      <Label htmlFor="subcategory">
-                        Subcategory (optional)
-                      </Label>
-                      <Select>
-                        <SelectTrigger
-                          id="subcategory"
-                          aria-label="Select subcategory"
-                        >
-                          <SelectValue placeholder="Select subcategory" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="t-shirts">T-Shirts</SelectItem>
-                          <SelectItem value="hoodies">Hoodies</SelectItem>
-                          <SelectItem value="sweatshirts">
-                            Sweatshirts
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div> */}
                   </div>
                 </CardContent>
               </Card>
@@ -285,51 +291,186 @@ function CreateJobForm() {
             <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
               <Card>
                 <CardHeader>
-                  <CardTitle>Product Status</CardTitle>
+                  <CardTitle>Байгууллага сонгох</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-6">
                     <div className="grid gap-3">
-                      <Label htmlFor="status">Status</Label>
-                      <Select>
-                        <SelectTrigger id="status" aria-label="Select status">
-                          <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="draft">Draft</SelectItem>
-                          <SelectItem value="published">Active</SelectItem>
-                          <SelectItem value="archived">Archived</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <FormField
+                        control={form.control}
+                        name="organizationId"
+                        render={({ field }) => (
+                          <FormItem className="">
+                            <Label htmlFor="status">Багууллага сонгох</Label>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue=""
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Сонгоно уу" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {organizations?.map((organization) => (
+                                  <SelectItem value={organization?.id}>
+                                    {organization?.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
                   </div>
                 </CardContent>
+                <CardFooter>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        type="button"
+                        disabled
+                      >
+                        Шинээр нэмэх
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Edit profile</DialogTitle>
+                        <DialogDescription>
+                          Make changes to your profile here. Click save when
+                          you're done.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="name" className="text-right">
+                            Name
+                          </Label>
+                          <Input
+                            id="name"
+                            defaultValue="Pedro Duarte"
+                            className="col-span-3"
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="username" className="text-right">
+                            Username
+                          </Label>
+                          <Input
+                            id="username"
+                            defaultValue="@peduarte"
+                            className="col-span-3"
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button type="submit">Save changes</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </CardFooter>
               </Card>
-
               <Card>
                 <CardHeader>
-                  <CardTitle>Archive Product</CardTitle>
-                  <CardDescription>
-                    Lipsum dolor sit amet, consectetur adipiscing elit.
-                  </CardDescription>
+                  <CardTitle>Байршил</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div></div>
-                  <Button size="sm" variant="secondary">
-                    Archive Product
-                  </Button>
+                  <div className="grid gap-6">
+                    <div className="grid gap-3">
+                      <FormField
+                        control={form.control}
+                        name="jobLocationId"
+                        render={({ field }) => (
+                          <FormItem className="">
+                            <Label htmlFor="jobLocationId">
+                              Байршил сонгох
+                            </Label>
+                            <Select onValueChange={field.onChange}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Сонгоно уу" />
+                                </SelectTrigger>
+                              </FormControl>
+
+                              <SelectContent>
+                                {jobLocations?.map((jobLocation) => (
+                                  <SelectItem value={jobLocation.id}>
+                                    {jobLocation.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
                 </CardContent>
+                <CardFooter>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        type="button"
+                        disabled
+                      >
+                        Шинээр нэмэх
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Edit profile</DialogTitle>
+                        <DialogDescription>
+                          Make changes to your profile here. Click save when
+                          you're done.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="name" className="text-right">
+                            Name
+                          </Label>
+                          <Input
+                            id="name"
+                            defaultValue="Pedro Duarte"
+                            className="col-span-3"
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="username" className="text-right">
+                            Username
+                          </Label>
+                          <Input
+                            id="username"
+                            defaultValue="@peduarte"
+                            className="col-span-3"
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button type="submit">Save changes</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </CardFooter>
               </Card>
             </div>
           </div>
-          <div className="flex items-center justify-center gap-2 md:hidden">
+          {/* <div className="flex items-center justify-center gap-2 md:hidden">
             <Button variant="outline" size="sm">
               Discard
             </Button>
             <Button size="sm" type="submit">
               Save Product
             </Button>
-          </div>
+          </div> */}
         </div>
       </form>
     </Form>

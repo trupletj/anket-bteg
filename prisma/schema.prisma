@@ -87,14 +87,14 @@ model VerificationToken {
 
 //Jobs category - Ajliin zartai holbootoi modeluud
 model JobCategory{
-  id Int @id @default(autoincrement())
+  id   String          @id @default(cuid())
   name String
   description String
   jobs Job[]
 }
 
 model Job {
-  id Int @id @default(autoincrement())
+  id        String          @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   openingAt DateTime
@@ -102,38 +102,38 @@ model Job {
   name     String   @db.VarChar(255)
   description   String?
   jobLocation JobLocation? @relation(fields: [jobLocationId], references: [id])
-  jobLocationId Int?
+  jobLocationId String? 
   organization Organization? @relation(fields: [organizationId], references: [id])
-  organizationId Int?
+  organizationId String? 
   process Process?  @relation(fields: [processId], references: [id])
-  processId Int? 
+  processId String? 
   jobCategory JobCategory? @relation(fields: [jobCategoryId], references: [id]) 
-  jobCategoryId Int?
+  jobCategoryId String? 
   application Application[]
 }
 
 model JobLocation {
-  id Int @id @default(autoincrement())
+  id String @id @default(cuid())
   name String   @db.VarChar(255)
   job Job[]
 }
 
 model Organization {
-   id Int @id @default(autoincrement())
+   id String @id @default(cuid())
    name String @db.VarChar(255)
    job Job[]
 }
 
 //Process category - process toi holbootoi heseg
 model Step {
- id Int @id @default(autoincrement())
+ id String @id @default(cuid())
  name String @db.VarChar(255)
  processStep ProcessStep[]
  
 }
 
 model Process {
-  id Int @id @default(autoincrement())  //Process table n songon shalgaruulaltin uil yawtsiig haruulna
+  id String @id @default(cuid())
   description String?
   processStep ProcessStep[]
   job Job[]
@@ -141,15 +141,15 @@ model Process {
 model ProcessStep{
   
   step Step @relation(fields: [stepId], references: [id])
-  stepId Int
+  stepId String
   process Process @relation(fields: [processId], references: [id])
-  processId Int
+  processId String
   status String?
   @@id([stepId,processId])
 }
 //Application, Applicant and Documents heseg
 model Applicant {
-  id Int @id @default(autoincrement())
+  id String @id @default(cuid())
   firstName String
   lastName String
   email String
@@ -165,9 +165,9 @@ model Application {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   applicant Applicant @relation(fields: [applicantId], references: [id])
-  applicantId Int
+  applicantId String
   job Job @relation(fields: [jobId], references: [id])
-  jobId Int
+  jobId String
   status String
  applicationDocument DocumentApplication[]
  jobHistory WorkHistory[]
@@ -198,11 +198,11 @@ model DocumentApplication {
    @@id([applicationId,documentId ])
 }
 model Picture {
-  id Int @id @default(autoincrement())
+  id String @id @default(cuid())
   name String
   path String
   applicant Applicant @relation(fields: [applicantId], references: [id])
-  applicantId Int @unique
+  applicantId String @unique
 }
 
 //Recruiters Application Evaluation and Status 

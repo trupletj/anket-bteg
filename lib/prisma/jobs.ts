@@ -16,8 +16,18 @@ export async function getJobById(id: number) {
 }
 
 export async function createJob(data: Prisma.JobCreateInput) {
-  const job = await prisma.job.create({
-    data,
-  });
-  return job;
+  try {
+    const job = await prisma.job.create({
+      data,
+    });
+    return job;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+//jobLocation
+export async function getJobLocations(args: Prisma.JobLocationFindManyArgs) {
+  const jobLocations = await prisma.jobLocation.findMany(args);
+  return jobLocations;
 }

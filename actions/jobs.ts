@@ -7,10 +7,12 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
 import { createJob } from "@/lib/prisma/jobs";
 
-export const createJobForm = async (values: z.infer<typeof JobSchema>) => {
+export const saveJobForm = async (values: z.infer<typeof JobSchema>) => {
   try {
     await createJob(values);
+
+    return { success: "Амжилттай бүртгэгдлээ" };
   } catch (error) {
-    throw error;
+    return { error: "Something went wrong" };
   }
 };

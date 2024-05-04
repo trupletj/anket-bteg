@@ -9,7 +9,6 @@ export const LoginSchema = z.object({
 
 export const RegisterSchema = z.object({
   email: z.string().email({ message: "Email is required" }),
-  password: z.string().min(6, "Password is required"),
   name: z.string().min(1, "Name is required"),
 });
 
@@ -18,8 +17,13 @@ export const JobSchema = z.object({
   description: z.string().min(1, "Description is required"),
   openingAt: z.date(),
   closingAt: z.date(),
-  // jobLocationId: z.number().int(),
-  // organizationId: z.number().int(),
+  jobLocationId: z.string().min(1, "Organization is required"),
+  organizationId: z.string().min(1, "Organization is required"),
   // processId: z.number().int(),
   // jobCategoryId: z.number().int(),
+});
+
+export const JobLocationSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  // organizationId: z.number().int(),
 });
