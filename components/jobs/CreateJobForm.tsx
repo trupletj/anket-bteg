@@ -76,7 +76,6 @@ function CreateJobForm({
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof JobSchema>>({
     resolver: zodResolver(JobSchema),
     defaultValues: {

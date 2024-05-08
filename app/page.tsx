@@ -48,7 +48,8 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 import { getJobs } from "@/lib/prisma/jobs";
-
+import { getJobLocations } from "@/lib/prisma/jobLocations";
+import { getOrganizations } from "@/lib/prisma/organizations";
 export default async function Home() {
   const jobs = await getJobs({
     include: {
@@ -59,12 +60,14 @@ export default async function Home() {
       createdAt: "desc",
     },
   });
+  const jobLocations = await getJobLocations({});
+  const organizations = await getOrganizations({});
   // if (error) {
   //   throw error;
-  // } 
+  // }
   return (
     <div className="flex min-h-screen w-full flex-col">
-      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 container">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6 text-nowrap ">
           <Link
             href="#"
@@ -79,12 +82,12 @@ export default async function Home() {
           >
             Нээлттэй ажлын байрууд
           </Link>
-          <Link
+          {/* <Link
             href="#"
             className="text-muted-foreground transition-colors hover:text-foreground"
           >
             Бидний тухай
-          </Link>
+          </Link> */}
         </nav>
         <Sheet>
           <SheetTrigger asChild>
@@ -110,9 +113,9 @@ export default async function Home() {
                 href="#"
                 className="text-muted-foreground hover:text-foreground"
               >
-                Dashboard
+                Нээлттэй ажлын байрууд
               </Link>
-              <Link
+              {/* <Link
                 href="#"
                 className="text-muted-foreground hover:text-foreground"
               >
@@ -132,7 +135,7 @@ export default async function Home() {
               </Link>
               <Link href="#" className="hover:text-foreground">
                 Settings
-              </Link>
+              </Link> */}
             </nav>
           </SheetContent>
         </Sheet>
@@ -162,11 +165,11 @@ export default async function Home() {
           </DropdownMenu>
         </div>
       </header>
-      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/80 p-4 md:gap-8 md:p-10">
-        <div className="mx-auto grid w-full max-w-6xl gap-2">
+      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/80 p-4 md:gap-8 md:p-10 ">
+        <div className="mx-auto grid w-full container gap-2">
           <h1 className="text-3xl font-semibold">Нээлттэй ажлын байрууд</h1>
         </div>
-        <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
+        <div className="mx-auto grid w-full container items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
           <div className="relative hidden flex-col items-start gap-8 md:flex">
             <form className="grid w-full items-start gap-6">
               <fieldset className="grid gap-6 rounded-lg border p-4">
@@ -183,51 +186,25 @@ export default async function Home() {
                       <SelectValue placeholder="-----" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="genesis">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <div className="grid gap-0.5">
-                            <p>
-                              Neural{" "}
-                              <span className="font-medium text-foreground">
-                                Genesis
-                              </span>
-                            </p>
-                            <p className="text-xs" data-description>
-                              Our fastest model for general use cases.
-                            </p>
+                      {organizations?.map((organization: any) => (
+                        <SelectItem
+                          key={organization?.id}
+                          value={organization?.id}
+                        >
+                          <div className="flex items-start gap-3 text-muted-foreground">
+                            <div className="grid gap-0.5">
+                              <p>
+                                <span className="font-medium text-foreground">
+                                  {organization?.name}
+                                </span>
+                              </p>
+                              {/* <p className="text-xs" data-description>
+                                Our fastest model for general use cases.
+                              </p> */}
+                            </div>
                           </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="explorer">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <div className="grid gap-0.5">
-                            <p>
-                              Neural{" "}
-                              <span className="font-medium text-foreground">
-                                Explorer
-                              </span>
-                            </p>
-                            <p className="text-xs" data-description>
-                              Performance and speed for efficiency.
-                            </p>
-                          </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="quantum">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <div className="grid gap-0.5">
-                            <p>
-                              Neural{" "}
-                              <span className="font-medium text-foreground">
-                                Quantum
-                              </span>
-                            </p>
-                            <p className="text-xs" data-description>
-                              The most powerful model for complex computations.
-                            </p>
-                          </div>
-                        </div>
-                      </SelectItem>
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <Label htmlFor="model">Байршил</Label>
@@ -239,51 +216,25 @@ export default async function Home() {
                       <SelectValue placeholder="-----" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="genesis">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <div className="grid gap-0.5">
-                            <p>
-                              Neural{" "}
-                              <span className="font-medium text-foreground">
-                                Genesis
-                              </span>
-                            </p>
-                            <p className="text-xs" data-description>
-                              Our fastest model for general use cases.
-                            </p>
+                      {jobLocations?.map((jobLocation: any) => (
+                        <SelectItem
+                          key={jobLocation?.id}
+                          value={jobLocation?.id}
+                        >
+                          <div className="flex items-start gap-3 text-muted-foreground">
+                            <div className="grid gap-0.5">
+                              <p>
+                                <span className="font-medium text-foreground">
+                                  {jobLocation?.name}
+                                </span>
+                              </p>
+                              {/* <p className="text-xs" data-description>
+                                Our fastest model for general use cases.
+                              </p> */}
+                            </div>
                           </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="explorer">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <div className="grid gap-0.5">
-                            <p>
-                              Neural{" "}
-                              <span className="font-medium text-foreground">
-                                Explorer
-                              </span>
-                            </p>
-                            <p className="text-xs" data-description>
-                              Performance and speed for efficiency.
-                            </p>
-                          </div>
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="quantum">
-                        <div className="flex items-start gap-3 text-muted-foreground">
-                          <div className="grid gap-0.5">
-                            <p>
-                              Neural{" "}
-                              <span className="font-medium text-foreground">
-                                Quantum
-                              </span>
-                            </p>
-                            <p className="text-xs" data-description>
-                              The most powerful model for complex computations.
-                            </p>
-                          </div>
-                        </div>
-                      </SelectItem>
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -352,7 +303,9 @@ export default async function Home() {
                     </AccordionContent>
 
                     <CardFooter className="border-t px-6 py-4 flex justify-between">
-                      <Button>Дэлгэрэнгүй</Button>
+                      <Link href={`/anket/${job.id}`}>
+                        <Button>Анкет илгээх</Button>
+                      </Link>
                       <div className="flex items-center space-x-4">
                         <span className="flex items-center space-x-1">
                           <Calendar className="size-4" />{" "}

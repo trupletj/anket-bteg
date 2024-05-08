@@ -25,9 +25,3 @@ export async function createJob(data: Prisma.JobCreateInput) {
     console.log(e);
   }
 }
-
-//jobLocation
-export async function getJobLocations(args: Prisma.JobLocationFindManyArgs) {
-  const jobLocations = await prisma.jobLocation.findMany(args);
-  return jobLocations;
-}

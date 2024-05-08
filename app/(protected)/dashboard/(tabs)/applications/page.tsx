@@ -1,20 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  File,
-  Home,
-  LineChart,
-  ListFilter,
-  MoreHorizontal,
-  Package,
-  Package2,
-  PanelLeft,
-  PlusCircle,
-  Search,
-  Settings,
-  ShoppingCart,
-  Users2,
-} from "lucide-react";
+import { File, ListFilter, MoreHorizontal } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -50,17 +36,22 @@ export default function page() {
     <Tabs defaultValue="all" className="flex-1 h-full flex flex-col">
       <div className="flex items-center">
         <TabsList>
-          <TabsTrigger value="all">All</TabsTrigger>
-          <TabsTrigger value="active">Active</TabsTrigger>
+          <TabsTrigger value="all">Бүгд</TabsTrigger>
+          {/* <TabsTrigger value="active">Active</TabsTrigger>
           <TabsTrigger value="draft">Draft</TabsTrigger>
           <TabsTrigger value="archived" className="hidden sm:flex">
             Archived
-          </TabsTrigger>
+          </TabsTrigger> */}
         </TabsList>
         <div className="ml-auto flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8 gap-1">
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 gap-1"
+                disabled
+              >
                 <ListFilter className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                   Filter
@@ -77,26 +68,26 @@ export default function page() {
               <DropdownMenuCheckboxItem>Archived</DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button size="sm" variant="outline" className="h-8 gap-1">
+          <Button size="sm" variant="outline" className="h-8 gap-1" disabled>
             <File className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
               Export
             </span>
           </Button>
-          <Button size="sm" className="h-8 gap-1">
+          {/* <Button size="sm" className="h-8 gap-1">
             <PlusCircle className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
               Add Product
             </span>
-          </Button>
+          </Button> */}
         </div>
       </div>
       <TabsContent value="all">
-        <Card x-chunk="dashboard-06-chunk-0">
+        <Card>
           <CardHeader>
-            <CardTitle>Products</CardTitle>
+            <CardTitle>Ирсэн анкет</CardTitle>
             <CardDescription>
-              Manage your products and view their sales performance.
+              {/* Manage your products and view their sales performance. */}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -104,16 +95,18 @@ export default function page() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="hidden w-[100px] sm:table-cell">
-                    <span className="sr-only">Image</span>
+                    <span className="sr-only">Зураг</span>
                   </TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="hidden md:table-cell">Price</TableHead>
+                  <TableHead>Овог Нэр</TableHead>
+                  <TableHead>Төлөв</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    Ажлын байр
+                  </TableHead>
                   <TableHead className="hidden md:table-cell">
                     Total Sales
                   </TableHead>
                   <TableHead className="hidden md:table-cell">
-                    Created at
+                    Ирсэн огноо
                   </TableHead>
                   <TableHead>
                     <span className="sr-only">Actions</span>
