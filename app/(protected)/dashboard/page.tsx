@@ -2,6 +2,7 @@ import Example from "@/components/dashboard/Example";
 import React from "react";
 import { useRouter, redirect } from "next/navigation";
 
+
 function page() {
   redirect("/dashboard/applications");
   return (

@@ -121,7 +121,7 @@ export default function JobsList({ jobs } = { jobs: [] || undefined }) {
                     Байршил
                   </TableHead>
                   <TableHead className="hidden md:table-cell">
-                    Total Sales
+                    Байгууллага
                   </TableHead>
                   <TableHead className="hidden md:table-cell">
                     Нээх огноо
